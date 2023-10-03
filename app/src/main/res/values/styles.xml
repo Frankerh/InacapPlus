@@ -1,0 +1,10 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Otros atributos de estilo -->
+
+        <!-- Cambiar el color de la StatusBar -->
+        <item name="android:statusBarColor">@color/lightblue</item>
+    </style>
+
+</resources>
+

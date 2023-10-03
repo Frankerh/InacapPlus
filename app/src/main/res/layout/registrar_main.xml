@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/white"
+    tools:context=".Registrar">
+
+    <!-- Logo o imagen de la aplicación -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="173dp"
+        android:layout_height="167dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/inacap" />
+
+    <ImageView
+        android:id="@+id/ImageView"
+        android:layout_width="421dp"
+        android:layout_height="480dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="0dp"
+        android:src="@drawable/logoo" />
+
+    <!-- Campo de entrada de correo electrónico -->
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="329dp"
+        android:layout_height="58dp"
+        android:layout_below="@id/logoImageView"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="104dp"
+        android:textColor="@color/black"
+        android:layout_marginEnd="64dp"
+        android:hint="Correo Electrónico"
+        android:inputType="textEmailAddress" />
+
+    <!-- Campo de entrada de contraseña -->
+
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="329dp"
+        android:layout_height="58dp"
+        android:layout_below="@id/emailEditText"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="64dp"
+        android:hint="Contraseña"
+        android:inputType="textPassword" />
+
+
+
+    <!-- Botón de inicio de sesión -->
+
+    <EditText
+        android:id="@+id/passwordconfirm"
+        android:layout_width="329dp"
+        android:layout_height="58dp"
+        android:layout_below="@id/emailEditText"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/black"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="54dp"
+        android:layout_marginEnd="64dp"
+        android:hint="Confirmar Contraseña"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/lightblue"
+        android:layout_below="@id/passwordEditText"
+        android:layout_marginTop="74dp"
+        android:text="Registrarse" />
+
+    <!-- Texto para registrarse -->
+    <TextView
+        android:id="@+id/inicia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginButton"
+        android:layout_marginTop="16dp"
+        android:text="¿Tienes cuenta? Inicia aquí."
+        android:gravity="center"
+        android:textColor="@android:color/holo_blue_dark" />
+
+
+</RelativeLayout>

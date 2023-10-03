@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/white"
+    tools:context=".RestablecerCon">
+
+    <!-- Campo de entrada de correo electrónico -->
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="385dp"
+        android:layout_height="68dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:hint="Correo Electrónico"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/black" />
+
+    <!-- Botón de restablecimiento de contraseña -->
+    <Button
+        android:id="@+id/restablecerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emailEditText"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/lightblue"
+        android:text="Restablecer Contraseña" />
+
+</RelativeLayout>

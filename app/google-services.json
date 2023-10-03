@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "182896263920",
+    "project_id": "inacappluss",
+    "storage_bucket": "inacappluss.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182896263920:android:e82f9c56a0d3a9bce8b835",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9qTG-0BV1Wlpg044YRaWtP95mOZSi4xA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
