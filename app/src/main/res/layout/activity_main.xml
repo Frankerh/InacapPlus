@@ -59,7 +59,7 @@
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/lightblue"
+        android:backgroundTint="@color/rojo"
         android:layout_below="@id/passwordEditText"
         android:layout_marginTop="24dp"
         android:text="Iniciar Sesión" />
