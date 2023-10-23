@@ -6,10 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.myapplication.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,17 +27,6 @@ public class RestablecerCon extends AppCompatActivity {
 
         correoEditText = findViewById(R.id.emailEditText);
         restablecerButton = findViewById(R.id.restablecerButton);
-
-        // Verificar si el usuario está autenticado
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null) {
-            // El usuario no está autenticado, muestra un mensaje de error y redirige a la pantalla de inicio de sesión
-            Toast.makeText(this, "Debe estar autenticado para restablecer la contraseña.", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(RestablecerCon.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
         restablecerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -8,71 +8,74 @@
     android:background="@color/white"
     tools:context=".Registrar">
 
-    <!-- Logo o imagen de la aplicación -->
-    <ImageView
-        android:id="@+id/logoImageView"
-        android:layout_width="173dp"
-        android:layout_height="167dp"
+    <!-- Agregar foto de perfil circular como logo -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:src="@drawable/inacap" />
+        android:src="@drawable/user"
+        app:civ_border_width="2dp"
+        app:civ_border_color="@color/rojo" />
 
-    <ImageView
-        android:id="@+id/ImageView"
-        android:layout_width="421dp"
-        android:layout_height="480dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="0dp"
-        android:src="@drawable/logoo" />
+    <Button
+        android:id="@+id/uploadProfileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileImageView"
+        android:backgroundTint="@color/rojo"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:text="Cargar Foto de Perfil"
+        android:onClick="openGallery" />
 
     <!-- Campo de entrada de correo electrónico -->
     <EditText
         android:id="@+id/emailEditText"
         android:layout_width="329dp"
         android:layout_height="58dp"
-        android:layout_below="@id/logoImageView"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="104dp"
+        android:layout_below="@+id/uploadProfileButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:textColor="@color/black"
-        android:layout_marginEnd="64dp"
         android:hint="Correo Electrónico"
         android:inputType="textEmailAddress" />
 
+    <!-- Campo de entrada de nombre de usuario -->
+    <EditText
+        android:id="@+id/NameText"
+        android:layout_width="329dp"
+        android:layout_height="58dp"
+        android:layout_below="@+id/emailEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/black"
+        android:hint="Nombre de usuario"
+        android:inputType="text" />
+
     <!-- Campo de entrada de contraseña -->
-
-
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="329dp"
         android:layout_height="58dp"
-        android:layout_below="@id/emailEditText"
-        android:layout_alignParentStart="true"
+        android:layout_below="@+id/NameText"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
         android:textColor="@color/black"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="64dp"
         android:hint="Contraseña"
         android:inputType="textPassword" />
 
-
-
-    <!-- Botón de inicio de sesión -->
-
+    <!-- Campo de entrada de confirmación de contraseña -->
     <EditText
         android:id="@+id/passwordconfirm"
         android:layout_width="329dp"
         android:layout_height="58dp"
-        android:layout_below="@id/emailEditText"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/passwordEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
         android:textColor="@color/black"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="54dp"
-        android:layout_marginEnd="64dp"
         android:hint="Confirmar Contraseña"
         android:inputType="textPassword" />
 
@@ -80,9 +83,10 @@
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/lightblue"
-        android:layout_below="@id/passwordEditText"
-        android:layout_marginTop="74dp"
+        android:backgroundTint="@color/rojo"
+        android:textColor="@color/white"
+        android:layout_below="@+id/passwordconfirm"
+        android:layout_marginTop="16dp"
         android:text="Registrarse" />
 
     <!-- Texto para registrarse -->
@@ -90,11 +94,10 @@
         android:id="@+id/inicia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginButton"
+        android:layout_below="@+id/loginButton"
         android:layout_marginTop="16dp"
         android:text="¿Tienes cuenta? Inicia aquí."
         android:gravity="center"
         android:textColor="@android:color/holo_blue_dark" />
-
 
 </RelativeLayout>

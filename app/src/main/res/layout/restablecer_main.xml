@@ -27,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/emailEditText"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@color/lightblue"
+        android:backgroundTint="@color/rojo"
+        android:textColor="@color/white"
         android:text="Restablecer Contraseña" />
 
 </RelativeLayout>

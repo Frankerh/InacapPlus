@@ -35,9 +35,9 @@
         android:layout_height="56dp"
         android:layout_below="@id/logoImageView"
         android:hint="Correo Electrónico"
-        android:layout_marginStart="33dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="150dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="50dp"
         android:inputType="textEmailAddress"
         android:textColor="@color/black" />
 
@@ -47,9 +47,9 @@
         android:layout_width="379dp"
         android:layout_height="60dp"
         android:layout_below="@id/emailEditText"
-        android:layout_marginStart="33dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="54dp"
+        android:layout_marginEnd="50dp"
         android:hint="Contraseña"
         android:inputType="textPassword"
         android:textColor="@color/black" />
@@ -60,6 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/rojo"
+        android:textColor="@color/white"
         android:layout_below="@id/passwordEditText"
         android:layout_marginTop="24dp"
         android:text="Iniciar Sesión" />

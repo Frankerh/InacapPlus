@@ -3,7 +3,7 @@
         <!-- Otros atributos de estilo -->
 
         <!-- Cambiar el color de la StatusBar -->
-        <item name="android:statusBarColor">@color/lightblue</item>
+        <item name="android:statusBarColor">@color/rojo</item>
     </style>
 
 </resources>
