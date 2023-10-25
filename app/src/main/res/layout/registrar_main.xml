@@ -69,7 +69,7 @@
 
     <!-- Campo de entrada de confirmación de contraseña -->
     <EditText
-        android:id="@+id/passwordconfirm"
+        android:id="@+id/passwordconfirmText"
         android:layout_width="329dp"
         android:layout_height="58dp"
         android:layout_below="@+id/passwordText"
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/rojo"
         android:textColor="@color/white"
-        android:layout_below="@+id/passwordconfirm"
+        android:layout_below="@+id/passwordconfirmText"
         android:layout_marginTop="16dp"
         android:text="Registrarse" />
 
