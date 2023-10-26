@@ -1,8 +1,5 @@
 package com.example.myapplication;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,51 +8,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.firebase.storage.UploadTask;
 
 public class EditarPerfil extends AppCompatActivity {
 
-    private ImageView profileImageView;
-    private Button changeProfileImageButton;
-    private EditText firstNameEditText;
-    private EditText lastNameEditText;
+    private static final int PICK_IMAGE_REQUEST_CODE = 1;
     private EditText usernameEditText;
     private EditText descriptionEditText;
     private Button saveProfileButton;
-    private Uri selectedImageUri;
+    private ImageView profileImageView;
+    private Button changeProfileImageButton;
 
-    // Declaración de la variable para manejar la selección de imágenes
-    private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    if (data != null) {
-                        Uri selectedImageUri = data.getData();
-                        // Ahora puedes manejar la Uri de la imagen seleccionada
-                        if (selectedImageUri != null) {
-                            profileImageView.setImageURI(selectedImageUri);
-                            // Carga la nueva imagen de perfil a Firebase Storage y actualiza la URL en Firebase Realtime Database
-                            uploadImageToFirebaseStorage(selectedImageUri);
-                        }
-                    }
-                }
-            }
-    );
+    private FirebaseFirestore db;
+    private DocumentReference profileRef;
+    private StorageReference storageReference;
+    private Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,41 +40,37 @@ public class EditarPerfil extends AppCompatActivity {
         setContentView(R.layout.editarperf_main);
 
         // Inicializa las vistas
-        profileImageView = findViewById(R.id.profileImageView);
-        changeProfileImageButton = findViewById(R.id.changeProfileImageButton);
-        firstNameEditText = findViewById(R.id.firstNameEditText);
-        lastNameEditText = findViewById(R.id.lastNameEditText);
         usernameEditText = findViewById(R.id.usernameEditText);
         descriptionEditText = findViewById(R.id.descriptionEditText);
         saveProfileButton = findViewById(R.id.saveProfileButton);
+        profileImageView = findViewById(R.id.profileImageView);
+        changeProfileImageButton = findViewById(R.id.changeProfileImageButton);
+
+        // Inicializa Firebase Firestore y obtén una referencia al perfil del usuario actual
+        db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        profileRef = db.collection("Users").document(userId);
+
+        // Inicializa Firebase Storage y obtén una referencia para guardar la imagen de perfil
+        storageReference = FirebaseStorage.getInstance().getReference().child("profile_images").child(userId + ".jpg");
+
+        // Configura el botón para guardar el perfil
+        saveProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guardarPerfil();
+            }
+        });
 
         // Configura el botón para cambiar la foto de perfil
         changeProfileImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Abre la galería de fotos para seleccionar una nueva imagen de perfil
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                imagePickerLauncher.launch(intent);
+                openGallery();
             }
         });
 
-        // Configura el botón para guardar el perfil del usuario
-        saveProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Obtén los datos ingresados por el usuario
-                String nombre = firstNameEditText.getText().toString();
-                String apellido = lastNameEditText.getText().toString();
-                String nombre_usuario = usernameEditText.getText().toString();
-                String descripcion = descriptionEditText.getText().toString();
-
-                // Guarda estos datos en Firebase Realtime Database junto con la URL de la imagen de perfil
-                saveUserProfileData(nombre, apellido, nombre_usuario, descripcion);
-            }
-        });
-
-        // Configura la navegación desde la actividad de perfil
+        // Configura la navegación desde la actividad de edición de perfil
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -105,102 +78,73 @@ public class EditarPerfil extends AppCompatActivity {
                 int itemId = item.getItemId();
                 if (itemId == R.id.action_home) {
                     // Abre la actividad Home
-                    Intent homeIntent = new Intent(EditarPerfil.this, Home.class);
-                    startActivity(homeIntent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    // Agrega la lógica para abrir la actividad Home
                 } else if (itemId == R.id.action_chat) {
                     // Abre la actividad Chat
-                    Intent chatIntent = new Intent(EditarPerfil.this, Chat.class);
-                    startActivity(chatIntent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    // Agrega la lógica para abrir la actividad Chat
                 } else if (itemId == R.id.action_profile) {
-                    Intent chatIntent = new Intent(EditarPerfil.this, Perfil.class);
-                    startActivity(chatIntent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    item.setChecked(true); // Marcar la opción de perfil como seleccionada
+                    // Abre la actividad Perfil
+                    // Agrega la lógica para abrir la actividad Perfil
                 }
                 return true;
             }
         });
+    }
 
+    private void guardarPerfil() {
+        String nuevoNombre = usernameEditText.getText().toString();
+        String nuevaDescripcion = descriptionEditText.getText().toString();
+
+        // Actualiza los datos del perfil en Firebase Firestore
+        profileRef.update("name", nuevoNombre, "descripcion", nuevaDescripcion)
+                .addOnSuccessListener(aVoid -> {
+                    // Los datos del perfil se actualizaron exitosamente
+                    // Puedes mostrar un mensaje de éxito o navegar a otra actividad (perfil)
+                    Intent perfilIntent = new Intent(EditarPerfil.this, Perfil.class);
+                    startActivity(perfilIntent);
+                })
+                .addOnFailureListener(e -> {
+                    // Maneja el error si la actualización falla
+                });
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            // Selección de imagen exitosa
-            selectedImageUri = data.getData();
-            profileImageView.setImageURI(selectedImageUri);
-            uploadImageToFirebaseStorage(selectedImageUri);
-        } else if (requestCode == 2 && resultCode == RESULT_OK) { // Usamos el nuevo código de solicitud
-            // Selección de una nueva imagen exitosa
-            selectedImageUri = data.getData();
-            profileImageView.setImageURI(selectedImageUri);
 
-            // Carga la nueva imagen de perfil a Firebase Storage y actualiza la URL en Firebase Realtime Database o Firestore
-            uploadImageToFirebaseStorage(selectedImageUri);
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            selectedImageUri = data.getData();
+            profileImageView.setImageURI(selectedImageUri); // Muestra la nueva imagen seleccionada en la vista
+
+            // Sube la nueva imagen de perfil a Firebase Storage
+            if (selectedImageUri != null) {
+                UploadTask uploadTask = storageReference.putFile(selectedImageUri);
+
+                uploadTask.addOnSuccessListener(taskSnapshot -> {
+                    // La imagen se cargó exitosamente en Firebase Storage
+                    // Ahora, actualiza la referencia de la imagen de perfil en Firestore
+                    storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String imageUrl = uri.toString();
+                        profileRef.update("profileImageUrl", imageUrl)
+                                .addOnSuccessListener(aVoid -> {
+                                    // La referencia de la imagen de perfil se actualizó exitosamente
+                                    // Puedes mostrar un mensaje de éxito o navegar a otra actividad
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Maneja el error si la actualización falla
+                                });
+                    });
+                }).addOnFailureListener(exception -> {
+                    // Ocurrió un error al subir la nueva imagen de perfil a Firebase Storage
+                    // Maneja el error aquí
+                });
+            }
         }
     }
-
-    private void uploadImageToFirebaseStorage(Uri imageUri) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference()
-                .child("profile_images")
-                .child(userId)
-                .child("profile_image.jpg"); // Nombre y extensión del archivo
-
-        storageReference.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                        String profileImageUrl = uri.toString();
-                        saveProfileImageUrlToDatabase(userId, profileImageUrl);
-                    });
-                })
-                .addOnFailureListener(e -> {
-                    // Manejar error si la carga falla
-                });
-    }
-
-    private void saveProfileImageUrlToDatabase(String userId, String profileImageUrl) {
-        DatabaseReference profileRef = FirebaseDatabase.getInstance().getReference().child("Perfiles").child(userId);
-        Map<String, Object> updateData = new HashMap<>();
-        updateData.put("foto_perfil_url", profileImageUrl);
-        profileRef.updateChildren(updateData)
-                .addOnSuccessListener(aVoid -> {
-                    // URL de la imagen de perfil guardada exitosamente en Firebase Realtime Database
-                })
-                .addOnFailureListener(e -> {
-                    // Manejar error si la guardia de la URL de la imagen falla
-                });
-    }
-
-    private void saveUserProfileData(String nombre, String apellido, String nombre_usuario, String descripcion) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference profileRef = FirebaseDatabase.getInstance().getReference().child("Perfiles").child(userId);
-
-        // Crear un mapa con los datos del perfil del usuario
-        Map<String, Object> userData = new HashMap<>();
-        userData.put("nombre", nombre);
-        userData.put("apellido", apellido);
-        userData.put("nombre_usuario", nombre_usuario);
-        userData.put("descripcion", descripcion);
-        // Agrega más campos de datos según tus necesidades, como "descripción", "foto_perfil_url", etc.
-
-        // Guarda los datos en Firebase Realtime Database
-        profileRef.updateChildren(userData)
-                .addOnSuccessListener(aVoid -> {
-                    // Datos del perfil actualizados exitosamente en Firebase Realtime Database
-                    mostrarMensaje("Perfil guardado exitosamente");
-                })
-                .addOnFailureListener(e -> {
-                    // Manejar error si la actualización falla
-                    mostrarMensaje("Error al guardar el perfil");
-                });
-    }
-
-    private void mostrarMensaje(String mensaje) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
-    }
-
 }
