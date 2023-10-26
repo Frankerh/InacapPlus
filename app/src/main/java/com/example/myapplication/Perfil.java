@@ -7,25 +7,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 
 public class Perfil extends AppCompatActivity {
 
     private ImageView profileImageView;
     private TextView usernameTextView;
-    private Button followButton;
     private TextView descriptionTextView;
-    private Button editProfileButton; // Agregamos un botón para editar el perfil
+    private Button editProfileButton;
+
+    private FirebaseFirestore db;
+    private DocumentReference profileRef;
+    private ListenerRegistration profileListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,24 +41,8 @@ public class Perfil extends AppCompatActivity {
         // Inicializa las vistas
         profileImageView = findViewById(R.id.profileImageView);
         usernameTextView = findViewById(R.id.usernameTextView);
-        followButton = findViewById(R.id.followButton);
         descriptionTextView = findViewById(R.id.descriptionTextView);
-        editProfileButton = findViewById(R.id.editar); // Inicializamos el botón de edición de perfil
-
-        // Configura el botón de seguir/dejar de seguir
-        followButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Implementa aquí la lógica para seguir o dejar de seguir al usuario
-                if (followButton.getText().toString().equals("Seguir")) {
-                    // Acción de seguir
-                    followButton.setText("Dejar de Seguir");
-                } else {
-                    // Acción de dejar de seguir
-                    followButton.setText("Seguir");
-                }
-            }
-        });
+        editProfileButton = findViewById(R.id.editar);
 
         // Configura el botón para editar el perfil
         editProfileButton.setOnClickListener(new View.OnClickListener() {
@@ -92,26 +82,24 @@ public class Perfil extends AppCompatActivity {
         // Marcar la opción de perfil como seleccionada al inicio
         bottomNavigationView.setSelectedItemId(R.id.action_profile);
 
-        // Cargar y mostrar los datos del perfil desde Firebase Realtime Database
+        // Inicializa Firebase Firestore y obtén una referencia al perfil del usuario actual
+        db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        profileRef = db.collection("Users").document(userId); // Cambio aquí a la colección "Users"
+
+        // Cargar y mostrar los datos del perfil desde Firebase Firestore
         cargarYMostrarDatosDelPerfil();
     }
 
     private void cargarYMostrarDatosDelPerfil() {
-        // Recupera el ID del usuario actual
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        // Obtén una referencia a la ubicación de los datos del perfil en Firebase Realtime Database
-        DatabaseReference profileRef = FirebaseDatabase.getInstance().getReference().child("Perfiles").child(userId);
-
-        // Agrega un listener para escuchar cambios en los datos del perfil
-        profileRef.addValueEventListener(new ValueEventListener() {
+        profileListener = profileRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    // Recupera los datos del perfil desde el snapshot
-                    String nombreUsuario = snapshot.child("nombre_usuario").getValue(String.class);
-                    String descripcion = snapshot.child("descripcion").getValue(String.class);
-                    String fotoPerfilUrl = snapshot.child("foto_perfil_url").getValue(String.class);
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
+                if (snapshot != null && snapshot.exists()) {
+                    // Recupera los datos del perfil desde el documento
+                    String nombreUsuario = snapshot.getString("name"); // Cambio a "name"
+                    String descripcion = snapshot.getString("descripcion");
+                    String fotoPerfilUrl = snapshot.getString("profileImageUrl"); // Cambio a "profileImageUrl"
 
                     // Actualiza las vistas en la actividad de perfil con los datos recuperados
                     usernameTextView.setText(nombreUsuario);
@@ -123,11 +111,15 @@ public class Perfil extends AppCompatActivity {
                     }
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Manejar error en caso de que la lectura de datos falle
-            }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Detén la escucha de cambios en el perfil al salir de la actividad
+        if (profileListener != null) {
+            profileListener.remove();
+        }
     }
 }

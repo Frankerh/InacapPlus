@@ -16,7 +16,7 @@
         android:padding="16dp">
 
         <!-- Imagen de perfil -->
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImageView"
             android:layout_width="120dp"
             android:layout_height="120dp"
@@ -24,7 +24,9 @@
             android:layout_centerHorizontal="true"
             android:layout_marginStart="10dp"
             android:layout_marginTop="0dp"
-            android:src="@drawable/ic_profile" />
+            android:src="@drawable/ic_profile"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/rojo" />
 
         <!-- Nombre de usuario -->
         <TextView
@@ -34,6 +36,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="81dp"
+            android:textColor="@color/black"
             android:text="Nombre de Usuario"
             android:textSize="18sp" />
 
@@ -43,12 +46,16 @@
 
         <Button
             android:id="@+id/followButton"
-            android:layout_width="128dp"
-            android:layout_height="63dp"
+            android:layout_width="167dp"
+            android:layout_height="59dp"
             android:layout_below="@id/usernameTextView"
             android:layout_alignParentEnd="true"
+            android:layout_marginStart="29dp"
+            android:textColor="@color/white"
             android:layout_marginTop="13dp"
-            android:layout_marginEnd="99dp"
+            android:layout_marginEnd="69dp"
+            android:layout_toEndOf="@+id/profileImageView"
+            android:backgroundTint="@color/rojo"
             android:text="Seguir" />
 
         <TextView
@@ -56,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/followButton"
+            android:textColor="@color/black"
             android:layout_marginTop="16dp"
             android:text="Descripción del perfil: Esto es una descripción del perfil del usuario de la red social. Puedes escribir más información sobre ti aquí." />
 
@@ -70,7 +78,9 @@
                 android:id="@+id/editar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:layout_weight="1"
+                android:backgroundTint="@color/rojo"
                 android:text="Editar Perfil" />
 
             <Button
@@ -78,6 +88,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/rojo"
                 android:text="Mensajes" />
 
             <!-- Agrega más botones de acción aquí según tus necesidades -->
