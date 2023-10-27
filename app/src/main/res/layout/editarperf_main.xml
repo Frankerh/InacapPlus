@@ -42,10 +42,9 @@
         android:layout_height="57dp"
         android:layout_below="@id/changeProfileImageButton"
         android:layout_marginTop="4dp"
-        android:textColor="@color/black"
-        android:hint="Nombre" />
-
-
+        android:backgroundTint="#000000"
+        android:hint="Nombre"
+        android:textColor="@color/black" />
 
 
     <EditText
@@ -54,8 +53,9 @@
         android:layout_height="61dp"
         android:layout_below="@id/usernameEditText"
         android:layout_marginTop="1dp"
-        android:textColor="@color/black"
-        android:hint="Descripción" />
+        android:backgroundTint="#000000"
+        android:hint="Descripción"
+        android:textColor="@color/black" />
 
     <!-- Botón para guardar el perfil del usuario -->
 

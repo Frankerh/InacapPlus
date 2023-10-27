@@ -14,11 +14,12 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:layout_gravity="start"
-        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    </androidx.appcompat.widget.Toolbar>
+        android:background="@color/rojo"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <!-- Agrega un campo de búsqueda a la Toolbar -->
 
     <!-- Encabezado -->
     <RelativeLayout
@@ -32,7 +33,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:text="Bienvenido,"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -47,7 +48,7 @@
             android:layout_marginTop="-26dp"
             android:layout_marginEnd="103dp"
             android:layout_toEndOf="@+id/text"
-            android:text="Nombre de Usuario"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -57,11 +58,12 @@
 
     <!-- Lista de publicaciones -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/postsRecyclerView"
+        android:id="@+id/usersSearchRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="vertical" />
+
 
     <!-- Barra de navegación inferior que abarca toda la parte inferior -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

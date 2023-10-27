@@ -13,100 +13,18 @@
         android:id="@+id/chatToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/rojo"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Nombre del Chat" />
+        app:title="Chat" />
 
     <!-- Vista de desplazamiento para mensajes -->
     <ScrollView
         android:id="@+id/messagescrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"/>
 
-        <!-- Contenedor para mensajes -->
-        <LinearLayout
-            android:id="@+id/messageContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
 
-            <!-- Ejemplo de mensaje recibido -->
-
-            <!-- Ejemplo de mensaje enviado -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:background="@drawable/bubble_received"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/receivedMessageTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mensaje recibido"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/receivedMessageTimeTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12:34 PM"
-                    android:textColor="@android:color/darker_gray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:orientation="vertical"
-                android:background="@drawable/bubble_sent">
-
-                <TextView
-                    android:id="@+id/sentMessageTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mensaje enviado"
-                    android:textColor="@android:color/white" />
-
-                <TextView
-                    android:id="@+id/sentMessageTimeTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12:45 PM"
-                    android:textColor="@android:color/darker_gray" />
-            </LinearLayout>
-
-            <!-- Puedes agregar más mensajes recibidos o enviados aquí -->
-
-        </LinearLayout>
-    </ScrollView>
-
-    <!-- Campo de entrada de texto y botón de enviar -->
-    <LinearLayout
-        android:id="@+id/inputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <EditText
-            android:id="@+id/messageEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Escribe tu mensaje"
-            android:padding="8dp" />
-
-        <Button
-            android:id="@+id/sendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enviar"
-            android:padding="8dp" />
-    </LinearLayout>
     <!-- Barra de navegación inferior que abarca toda la parte inferior -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

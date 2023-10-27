@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@color/white"
+    android:padding="16dp"
     tools:context=".MainActivity">
 
     <!-- Logo o imagen de la aplicación -->
@@ -34,10 +34,11 @@
         android:layout_width="378dp"
         android:layout_height="56dp"
         android:layout_below="@id/logoImageView"
-        android:hint="Correo Electrónico"
         android:layout_marginStart="50dp"
         android:layout_marginTop="150dp"
         android:layout_marginEnd="50dp"
+        android:backgroundTint="#000000"
+        android:hint="Correo Electrónico"
         android:inputType="textEmailAddress"
         android:textColor="@color/black" />
 
@@ -50,6 +51,8 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="50dp"
+        android:backgroundTint="#000000"
+        android:drawableTint="#FFFFFF"
         android:hint="Contraseña"
         android:inputType="textPassword"
         android:textColor="@color/black" />
@@ -59,11 +62,11 @@
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/rojo"
-        android:textColor="@color/white"
         android:layout_below="@id/passwordEditText"
         android:layout_marginTop="24dp"
-        android:text="Iniciar Sesión" />
+        android:backgroundTint="@color/rojo"
+        android:text="Iniciar Sesión"
+        android:textColor="@color/white" />
 
     <!-- Texto para registrarse -->
     <TextView
@@ -75,6 +78,7 @@
         android:gravity="center"
         android:text="¿No tienes una cuenta? Regístrate aquí."
         android:textColor="@android:color/holo_blue_dark" />
+
     <TextView
         android:id="@+id/olvidasteContrasena"
         android:layout_width="wrap_content"

@@ -39,9 +39,10 @@
         android:layout_below="@+id/uploadProfileButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:textColor="@color/black"
+        android:backgroundTint="#000000"
         android:hint="Correo Electrónico"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:textColor="@color/black" />
 
     <!-- Campo de entrada de nombre de usuario -->
     <EditText
@@ -51,9 +52,10 @@
         android:layout_below="@+id/emailText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        android:textColor="@color/black"
+        android:backgroundTint="#000000"
         android:hint="Nombre de usuario"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textColor="@color/black" />
 
     <!-- Campo de entrada de contraseña -->
     <EditText
@@ -63,9 +65,10 @@
         android:layout_below="@+id/NameText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        android:textColor="@color/black"
+        android:backgroundTint="#000000"
         android:hint="Contraseña"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColor="@color/black" />
 
     <!-- Campo de entrada de confirmación de contraseña -->
     <EditText
@@ -75,9 +78,10 @@
         android:layout_below="@+id/passwordText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        android:textColor="@color/black"
+        android:backgroundTint="#000000"
         android:hint="Confirmar Contraseña"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColor="@color/black" />
 
     <Button
         android:id="@+id/loginButton"

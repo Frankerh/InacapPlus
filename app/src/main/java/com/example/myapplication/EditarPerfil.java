@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +56,10 @@ public class EditarPerfil extends AppCompatActivity {
         // Inicializa Firebase Storage y obtén una referencia para guardar la imagen de perfil
         storageReference = FirebaseStorage.getInstance().getReference().child("profile_images").child(userId + ".jpg");
 
+        // Cargar y mostrar los datos actuales del perfil y la foto de perfil
+        cargarYMostrarDatosActualesDelPerfil();
+        cargarYMostrarFotoDePerfil();
+
         // Configura el botón para guardar el perfil
         saveProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +97,33 @@ public class EditarPerfil extends AppCompatActivity {
         });
     }
 
+    // Cargar y mostrar los datos actuales del perfil
+    private void cargarYMostrarDatosActualesDelPerfil() {
+        profileRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String nombreActual = documentSnapshot.getString("name");
+                String descripcionActual = documentSnapshot.getString("descripcion");
+
+                usernameEditText.setText(nombreActual);
+                descriptionEditText.setText(descripcionActual);
+            }
+        });
+    }
+
+    // Cargar y mostrar la foto de perfil actual
+    private void cargarYMostrarFotoDePerfil() {
+        profileRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String fotoPerfilUrl = documentSnapshot.getString("profileImageUrl");
+
+                if (fotoPerfilUrl != null && !fotoPerfilUrl.isEmpty()) {
+                    // Utiliza Glide para cargar y mostrar la imagen de perfil en el ImageView
+                    Glide.with(this).load(fotoPerfilUrl).into(profileImageView);
+                }
+            }
+        });
+    }
+
     private void guardarPerfil() {
         String nuevoNombre = usernameEditText.getText().toString();
         String nuevaDescripcion = descriptionEditText.getText().toString();
@@ -120,7 +153,7 @@ public class EditarPerfil extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
-            profileImageView.setImageURI(selectedImageUri); // Muestra la nueva imagen seleccionada en la vista
+            profileImageView.setImageURI(selectedImageUri); // Muestra la nueva imagen seleccionada en el ImageView
 
             // Sube la nueva imagen de perfil a Firebase Storage
             if (selectedImageUri != null) {

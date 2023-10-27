@@ -97,9 +97,9 @@ public class Perfil extends AppCompatActivity {
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
                 if (snapshot != null && snapshot.exists()) {
                     // Recupera los datos del perfil desde el documento
-                    String nombreUsuario = snapshot.getString("name"); // Cambio a "name"
+                    String nombreUsuario = snapshot.getString("name");
                     String descripcion = snapshot.getString("descripcion");
-                    String fotoPerfilUrl = snapshot.getString("profileImageUrl"); // Cambio a "profileImageUrl"
+                    String fotoPerfilUrl = snapshot.getString("profileImageUrl");
 
                     // Actualiza las vistas en la actividad de perfil con los datos recuperados
                     usernameTextView.setText(nombreUsuario);

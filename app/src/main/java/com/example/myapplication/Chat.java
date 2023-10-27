@@ -32,18 +32,9 @@ public class Chat extends AppCompatActivity {
         setContentView(R.layout.chat_main);
 
         // Inicializa las vistas
-        messageScrollView = findViewById(R.id.messagescrollView);
-        messageContainer = findViewById(R.id.messageContainer);
-        messageEditText = findViewById(R.id.messageEditText);
-        sendButton = findViewById(R.id.sendButton);
 
-        // Configura el evento clic para el botón de enviar
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage();
-            }
-        });
+
+        // Configura el evento clic para el botón de enviar{
 
         // Configura la navegación desde la actividad de chat
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -73,28 +64,8 @@ public class Chat extends AppCompatActivity {
     }
 
     // Método para enviar un mensaje
-    private void sendMessage() {
-        String messageText = messageEditText.getText().toString().trim();
 
-        if (!messageText.isEmpty()) {
-            // Crea una vista de mensaje enviado
-            View sentMessageView = getLayoutInflater().inflate(R.layout.item_sent_message, null);
-            TextView sentMessageTextView = sentMessageView.findViewById(R.id.sentMessageTextView);
-            sentMessageTextView.setText(messageText);
 
-            // Agrega la vista al contenedor de mensajes
-            messageContainer.addView(sentMessageView);
 
-            // Limpia el campo de entrada
-            messageEditText.setText("");
 
-            // Desplázate automáticamente hacia abajo para mostrar el nuevo mensaje
-            messageScrollView.post(new Runnable() {
-                @Override
-                public void run() {
-                    messageScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-                }
-            });
-        }
-    }
 }

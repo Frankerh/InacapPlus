@@ -16,6 +16,8 @@
         android:layout_height="68dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
+        android:backgroundTint="#000000"
+        android:drawableTint="#000000"
         android:hint="Correo Electrónico"
         android:inputType="textEmailAddress"
         android:textColor="@color/black" />
