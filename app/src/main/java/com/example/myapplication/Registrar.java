@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,7 @@ public class Registrar extends AppCompatActivity {
     private Button uploadProfileButton;
     private CircleImageView profileImage;
     private Uri selectedImageUri;
+    private TextView inicia;
 
     private String email = "";
     private String name = "";
@@ -59,6 +61,16 @@ public class Registrar extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         uploadProfileButton = findViewById(R.id.uploadProfileButton);
         profileImage = findViewById(R.id.profileImage);
+        inicia = findViewById(R.id.inicia);
+
+        inicia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Configura la intención para abrir la actividad de Inicio de Sesión
+                Intent intent = new Intent(Registrar.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         uploadProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText correoEditText;
     private EditText contrasenaEditText;
     private Button iniciarSesionButton;
+    private TextView registrate;
+    private TextView olvidasteContrasena;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
@@ -33,11 +36,27 @@ public class MainActivity extends AppCompatActivity {
         correoEditText = findViewById(R.id.emailEditText);
         contrasenaEditText = findViewById(R.id.passwordEditText);
         iniciarSesionButton = findViewById(R.id.loginButton);
+        registrate = findViewById(R.id.registrate);
+        olvidasteContrasena = findViewById(R.id.olvidasteContrasena);
 
         iniciarSesionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 iniciarSesion();
+            }
+        });
+
+        registrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registrar();
+            }
+        });
+
+        olvidasteContrasena.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                olvidasteContrasena();
             }
         });
     }
@@ -78,6 +97,18 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void registrar() {
+        // Configura la intención para abrir la actividad de registro
+        Intent intent = new Intent(MainActivity.this, Registrar.class);
+        startActivity(intent);
+    }
+
+    private void olvidasteContrasena() {
+        // Configura la intención para abrir la actividad de restablecimiento de contraseña
+        Intent intent = new Intent(MainActivity.this, RestablecerCon.class);
+        startActivity(intent);
     }
 
     private void actualizarEstado(String estado) {
