@@ -58,6 +58,11 @@ public class Home extends AppCompatActivity {
                     startActivity(homeIntent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
+                else if (itemId == R.id.action_search) {
+                    Intent homeIntent = new Intent(Home.this, UserSearchActivity.class);
+                    startActivity(homeIntent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                }
                 return true;
             }
         });
@@ -66,13 +71,12 @@ public class Home extends AppCompatActivity {
         // Obtener el nombre de usuario de Firestore y mostrarlo en el TextView
         obtenerYMostrarNombreDeUsuario();
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar, menu);
         return true;
-    }
 
+    }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();

@@ -9,6 +9,16 @@
     android:background="@android:color/white"
     tools:context=".Perfil">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="start"
+        android:background="@color/rojo"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Mi Perfil"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

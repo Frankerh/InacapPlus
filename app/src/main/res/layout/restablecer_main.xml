@@ -9,6 +9,7 @@
     android:background="@color/white"
     tools:context=".RestablecerCon">
 
+
     <!-- Campo de entrada de correo electrónico -->
     <EditText
         android:id="@+id/emailEditText"

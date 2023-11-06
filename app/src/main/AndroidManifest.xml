@@ -46,6 +46,12 @@
         <activity android:name=".EditarPerfil">
             <!-- Configuraciones de SecondActivity -->
         </activity>
+        <activity android:name=".UserSearchActivity">
+            <!-- Configuraciones de SecondActivity -->
+        </activity>
+        <activity android:name=".UserProfileActivity">
+            <!-- Configuraciones de SecondActivity -->
+        </activity>
 
     </application>
 

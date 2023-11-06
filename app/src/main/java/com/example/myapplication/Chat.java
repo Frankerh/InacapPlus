@@ -3,69 +3,91 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.Home;
-import com.example.myapplication.Perfil;
-import com.example.myapplication.R;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.myapplication.User;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Chat extends AppCompatActivity {
 
-    private ScrollView messageScrollView;
-    private LinearLayout messageContainer;
-    private EditText messageEditText;
-    private Button sendButton;
+    private RecyclerView userRecyclerView;
+    private UserAdapter userAdapter;
+    private List<User> userList;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_main);
 
-        // Inicializa las vistas
+        // Inicializar la lista de usuarios
+        userList = new ArrayList<>();
 
+        // Inicializar el RecyclerView
+        userRecyclerView = findViewById(R.id.userRecyclerView);
+        userRecyclerView.setHasFixedSize(true);
+        userRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        userAdapter = new UserAdapter(userList);
+        userRecyclerView.setAdapter(userAdapter);
 
-        // Configura el evento clic para el botón de enviar{
+        // Obtener los datos de los usuarios desde Firebase Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Users")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String name = document.getString("name");
+                            String profileImageUrl = document.getString("profileImageUrl");
 
-        // Configura la navegación desde la actividad de chat
+                            // Crear un objeto User con los datos
+                            User user = new User(name, profileImageUrl);
+
+                            // Agregar el usuario a la lista
+                            userList.add(user);
+                        }
+
+                        // Notificar al adaptador que se han actualizado los datos
+                        userAdapter.notifyDataSetChanged();
+                    }
+                });
+
+        // Configurar la navegación desde la actividad de chat
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                if (itemId == R.id.action_home) {
-                    // Abre la actividad Home
-                    Intent homeIntent = new Intent(Chat.this, Home.class);
+                if (itemId == R.id.action_chat) {
+                    item.setChecked(true);
+                } else if (itemId == R.id.action_home) {
+                    Intent chatIntent = new Intent(Chat.this, Home.class);
+                    startActivity(chatIntent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                } else if (itemId == R.id.action_profile) {
+                    Intent homeIntent = new Intent(Chat.this, Perfil.class);
                     startActivity(homeIntent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                } else if (itemId == R.id.action_chat) {
-                    // No hagas nada, ya estás en la actividad Chat
-                } else if (itemId == R.id.action_profile) {
-                    // Abre la actividad Perfil
-                    Intent profileIntent = new Intent(Chat.this, Perfil.class);
-                    startActivity(profileIntent);
+                }
+                else if (itemId == R.id.action_search) {
+                    Intent homeIntent = new Intent(Chat.this, UserSearchActivity.class);
+                    startActivity(homeIntent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
                 return true;
             }
         });
-
-        // Marcar la opción de perfil como seleccionada al inicio
         bottomNavigationView.setSelectedItemId(R.id.action_chat);
     }
-
-    // Método para enviar un mensaje
-
-
-
-
 }
+

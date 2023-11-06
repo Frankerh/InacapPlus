@@ -17,6 +17,7 @@
         android:layout_gravity="start"
         android:background="@color/rojo"
         android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Inicio"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <!-- Agrega un campo de búsqueda a la Toolbar -->
@@ -25,6 +26,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
 
         <TextView
             android:id="@+id/text"
@@ -52,20 +54,24 @@
             android:textColor="@color/black"
             android:textSize="20sp" />
 
+
+
+
         <!-- Agrega otros elementos como botones de notificaciones, mensajes, etc., según tus necesidades -->
 
     </RelativeLayout>
 
     <!-- Lista de publicaciones -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/usersSearchRecyclerView"
+        android:id="@+id/postSearchRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="vertical" />
 
 
-    <!-- Barra de navegación inferior que abarca toda la parte inferior -->
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
@@ -73,6 +79,8 @@
         android:layout_gravity="start"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bot_nav" />
+
+
 
 </LinearLayout>
 

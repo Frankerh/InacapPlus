@@ -61,25 +61,30 @@ public class Perfil extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                if (itemId == R.id.action_home) {
-                    // Abre la actividad Home
-                    Intent homeIntent = new Intent(Perfil.this, Home.class);
-                    startActivity(homeIntent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                if (itemId == R.id.action_profile) {
+                    item.setChecked(true);
                 } else if (itemId == R.id.action_chat) {
-                    // Abre la actividad Chat
                     Intent chatIntent = new Intent(Perfil.this, Chat.class);
                     startActivity(chatIntent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else if (itemId == R.id.action_profile) {
-                    // No hagas nada, ya estás en la actividad Perfil
-                    item.setChecked(true); // Marcar la opción de perfil como seleccionada
+                    Intent homeIntent = new Intent(Perfil.this, Perfil.class);
+                    startActivity(homeIntent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                }
+                else if (itemId == R.id.action_search) {
+                    Intent homeIntent = new Intent(Perfil.this, UserSearchActivity.class);
+                    startActivity(homeIntent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                }
+                else if (itemId == R.id.action_home ) {
+                    Intent homeIntent = new Intent(Perfil.this, Home.class);
+                    startActivity(homeIntent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
                 return true;
             }
         });
-
-        // Marcar la opción de perfil como seleccionada al inicio
         bottomNavigationView.setSelectedItemId(R.id.action_profile);
 
         // Inicializa Firebase Firestore y obtén una referencia al perfil del usuario actual
