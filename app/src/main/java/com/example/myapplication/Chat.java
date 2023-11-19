@@ -1,21 +1,19 @@
 package com.example.myapplication;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.User;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,9 +47,11 @@ public class Chat extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String name = document.getString("name");
                             String profileImageUrl = document.getString("profileImageUrl");
+                            String uid = document.getString("uid"); // Agrega esta línea para obtener el UID
 
                             // Crear un objeto User con los datos
-                            User user = new User(name, profileImageUrl);
+                            User user = new User(name, profileImageUrl, uid);
+                            user.setUid(uid); // Establece el UID en el objeto User
 
                             // Agregar el usuario a la lista
                             userList.add(user);
@@ -88,6 +88,30 @@ public class Chat extends AppCompatActivity {
             }
         });
         bottomNavigationView.setSelectedItemId(R.id.action_chat);
+
+        // Configura el oyente de clic para los elementos de la lista de usuarios
+        userRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, userRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        // Obtén el UID del usuario al que se hizo clic en la lista
+                        String otherUid = userList.get(position).getUid();
+
+                        // Crea un Intent para abrir la actividad de chat privado y pasa el UID del usuario
+                        Intent chatIntent = new Intent(Chat.this, ChatPriv.class);
+                        chatIntent.putExtra("otherUid", otherUid);
+
+                        // Inicia la actividad de chat privado
+                        startActivity(chatIntent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        // Acciones para clic largo (si las necesitas)
+                    }
+                })
+        );
     }
 }
+
 

@@ -1,5 +1,4 @@
 package com.example.myapplication;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -9,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.User;
-
+import com.example.myapplication.ChatPriv; // Asegúrate de importar la clase ChatPriv
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
@@ -30,7 +29,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = userList.get(holder.getAdapterPosition());
+        User user = userList.get(position);
 
         holder.userNameTextView.setText(user.getName());
 
@@ -38,8 +37,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Puedes agregar aquí cualquier otra acción que desees realizar al hacer clic en un usuario
-                // Por ejemplo, mostrar información adicional o iniciar una conversación
+                // Obtén el UID del usuario al que se hizo clic en la lista
+                String otherUid = user.getUid();
+
+                // Crea un Intent para abrir la actividad de chat privado y pasa el UID del usuario
+                Intent chatIntent = new Intent(context, ChatPriv.class);
+                chatIntent.putExtra("otherUid", otherUid);
+
+                // Inicia la actividad de chat privado
+                context.startActivity(chatIntent);
             }
         });
     }
@@ -58,6 +64,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
     }
 }
+
+
 
 
 

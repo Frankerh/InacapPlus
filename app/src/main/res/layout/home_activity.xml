@@ -20,14 +20,12 @@
         app:title="Inicio"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <!-- Agrega un campo de búsqueda a la Toolbar -->
-
     <!-- Encabezado -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
+        <!-- Texto y otros elementos del encabezado -->
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
@@ -41,36 +39,80 @@
 
         <TextView
             android:id="@+id/usernameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="31dp"
+            android:layout_width="309dp"
+            android:layout_height="42dp"
             android:layout_below="@+id/text"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="6dp"
             android:layout_marginTop="-26dp"
-            android:layout_marginEnd="103dp"
+            android:layout_marginEnd="80dp"
             android:layout_toEndOf="@+id/text"
             android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />
 
-
-
-
-        <!-- Agrega otros elementos como botones de notificaciones, mensajes, etc., según tus necesidades -->
-
     </RelativeLayout>
 
+    <!-- Plain Text para escribir -->
+
+    <!-- Botón de Publicar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Foto del usuario -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/ic_profile"
+            app:civ_border_color="@color/rojo"
+            app:civ_border_width="2dp"
+            android:layout_gravity="center_vertical"/>
+
+        <!-- Campo de texto para publicar -->
+        <EditText
+            android:id="@+id/plainTextThoughts"
+            android:layout_width="0dp"
+            android:layout_height="68dp"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:hint="¿Qué estás pensando?"
+            android:padding="8dp"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/buttonPublish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="Publicar"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+
+
     <!-- Lista de publicaciones -->
+
+    <!-- Bottom Navigation View -->
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/postSearchRecyclerView"
+        android:id="@+id/publicaciones"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:scrollbars="vertical" />
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:clipToPadding="false"/>
 
-
-
+    <!-- Bottom Navigation View -->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -81,7 +123,7 @@
         app:menu="@menu/bot_nav" />
 
 
-
 </LinearLayout>
+
 
 
