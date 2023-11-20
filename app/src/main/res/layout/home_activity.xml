@@ -74,9 +74,10 @@
             android:layout_gravity="center_vertical"/>
 
         <!-- Campo de texto para publicar -->
+
         <EditText
             android:id="@+id/plainTextThoughts"
-            android:layout_width="0dp"
+            android:layout_width="162dp"
             android:layout_height="68dp"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
@@ -85,16 +86,6 @@
             android:padding="8dp"
             android:textColor="@color/black" />
 
-        <Button
-            android:id="@+id/buttonPublish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:text="Publicar"
-            android:textColor="@color/white" />
-
 
     </LinearLayout>
 
@@ -102,6 +93,16 @@
     <!-- Lista de publicaciones -->
 
     <!-- Bottom Navigation View -->
+
+    <Button
+        android:id="@+id/buttonPublish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Publicar"
+        android:textColor="@color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/publicaciones"

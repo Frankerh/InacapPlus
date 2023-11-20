@@ -7,9 +7,6 @@ import android.widget.TextView;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,7 +33,6 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
             opinionTextView = itemView.findViewById(R.id.textView4);
             likesTextView = itemView.findViewById(R.id.textView5);
             likeButton = itemView.findViewById(R.id.button);
-            profileImageView = itemView.findViewById(R.id.profileImageView);
         }
     }
 
