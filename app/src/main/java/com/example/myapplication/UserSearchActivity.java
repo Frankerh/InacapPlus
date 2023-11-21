@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -26,6 +28,7 @@ import java.util.List;
 
 public class UserSearchActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private List<User> userList;
     private UserAdapter userAdapter;
@@ -37,6 +40,7 @@ public class UserSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_main);
 
+        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         userList = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerView);
@@ -74,17 +78,14 @@ public class UserSearchActivity extends AppCompatActivity {
         // Marcar la opción de perfil como seleccionada al inicio
         bottomNavigationView.setSelectedItemId(R.id.action_search);
 
-        // Escuchar el evento de cierre del SearchView
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                // Ocultar solo el RecyclerView cuando se cierra la búsqueda
                 recyclerView.setVisibility(View.INVISIBLE);
                 return false;
             }
         });
 
-        //action_search
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -100,7 +101,6 @@ public class UserSearchActivity extends AppCompatActivity {
         });
     }
 
-    // Agregar la función onNavigationItemSelected para la opción de búsqueda en el menú
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar, menu);
@@ -108,7 +108,6 @@ public class UserSearchActivity extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) searchItem.getActionView();
 
-        // Agregar listener al SearchView
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -123,11 +122,9 @@ public class UserSearchActivity extends AppCompatActivity {
             }
         });
 
-        // Agregar listener al ícono de cierre (x) en el SearchView
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                // Ocultar solo el RecyclerView cuando se cierra la búsqueda
                 recyclerView.setVisibility(View.INVISIBLE);
                 return false;
             }
@@ -137,51 +134,42 @@ public class UserSearchActivity extends AppCompatActivity {
     }
 
     private void performSearch(String query) {
-        userList.clear(); // Limpia la lista antes de agregar nuevos resultados
+        userList.clear();
         userAdapter.notifyDataSetChanged();
-        db.collection("Users")
-                .whereGreaterThanOrEqualTo("name", query)
-                .whereLessThan("name", query + "\uf8ff")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                User user = document.toObject(User.class);
-                                // Evita agregar usuarios duplicados
-                                if (!userList.contains(user)) {
-                                    userList.add(user);
-                                }
-                            }
-                            userAdapter.notifyDataSetChanged();
 
-                            // Hacer visible el RecyclerView cuando haya resultados
-                            recyclerView.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String currentUserId = currentUser.getUid();
 
-        db.collection("Users")
-                .whereGreaterThanOrEqualTo("name", query)
-                .whereLessThan("name", query + "\uf8ff")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                User user = document.toObject(User.class);
-                                // Comprueba si la imagen del usuario está disponible en Firestore
-                                if (document.contains("profileImageUrl")) {
-                                    String imageUrl = document.getString("profileImageUrl");
-                                    // Agrega la URL de la imagen al usuario
-                                    user.setProfileImageUrl(imageUrl);
+            db.collection("Users")
+                    .whereGreaterThanOrEqualTo("name", query)
+                    .whereLessThan("name", query + "\uf8ff")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    User user = document.toObject(User.class);
+                                    user.setUid(document.getId()); // Establecer el UID del usuario
+                                    if (!userList.contains(user)) {
+                                        userList.add(user);
+                                    }
                                 }
+                                userAdapter.notifyDataSetChanged();
+                                recyclerView.setVisibility(View.VISIBLE);
+
+                                userAdapter.setOnItemClickListener(new UserAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(String uid) {
+                                        Intent intent = new Intent(UserSearchActivity.this, UserProfileActivity.class);
+                                        intent.putExtra("uid", uid);
+                                        startActivity(intent);
+                                    }
+                                });
                             }
-                            userAdapter.notifyDataSetChanged();
                         }
-                    }
-                });
+                    });
+        }
     }
 }

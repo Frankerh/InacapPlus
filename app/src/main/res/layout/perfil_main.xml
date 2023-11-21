@@ -26,6 +26,7 @@
         android:padding="16dp">
 
         <!-- Imagen de perfil -->
+        <!-- Imagen de perfil -->
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImageView"
             android:layout_width="120dp"
@@ -38,69 +39,47 @@
             app:civ_border_width="2dp"
             app:civ_border_color="@color/rojo" />
 
-        <!-- Nombre de usuario -->
         <TextView
             android:id="@+id/usernameTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="177dp"
             android:layout_height="wrap_content"
+            android:layout_below="@id/profileImageView"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="81dp"
-            android:textColor="@color/black"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="218dp"
             android:text="Nombre de Usuario"
+            android:textColor="@color/black"
             android:textSize="18sp" />
 
-        <!-- Botón para seguir o dejar de seguir -->
-
-        <!-- Descripción del perfil -->
-
         <Button
-            android:id="@+id/followButton"
-            android:layout_width="167dp"
-            android:layout_height="59dp"
-            android:layout_below="@id/usernameTextView"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="29dp"
-            android:textColor="@color/white"
-            android:layout_marginTop="13dp"
-            android:layout_marginEnd="69dp"
-            android:layout_toEndOf="@+id/profileImageView"
+            android:id="@+id/editar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileImageView"
+            android:layout_marginStart="71dp"
+            android:layout_marginTop="-91dp"
+            android:layout_toEndOf="@id/profileImageView"
             android:backgroundTint="@color/rojo"
-            android:text="Seguir" />
+            android:text="Editar Perfil"
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/descriptionTextView"
-            android:layout_width="match_parent"
+            android:layout_width="395dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/followButton"
-            android:textColor="@color/black"
-            android:layout_marginTop="16dp"
-            android:text="Descripción del perfil: Esto es una descripción del perfil del usuario de la red social. Puedes escribir más información sobre ti aquí." />
+            android:layout_below="@id/usernameTextView"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="0dp"
+            android:text="Descripción del perfil: Esto es una descripción del perfil del usuario de la red social. Puedes escribir más información sobre ti aquí."
+            android:textColor="@color/black" />
 
-        <!-- Botones de acción (por ejemplo, editar perfil, mensajes, etc.) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/descriptionTextView"
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
-            <Button
-                android:id="@+id/editar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:backgroundTint="@color/rojo"
-                android:text="Editar Perfil" />
-
-            <Button
-                android:id="@+id/mensaje"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/rojo"
-                android:text="Mensajes" />
 
             <!-- Agrega más botones de acción aquí según tus necesidades -->
         </LinearLayout>

@@ -1,4 +1,5 @@
 package com.example.myapplication;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -8,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.myapplication.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,7 +20,7 @@ import java.util.List;
 public class Chat extends AppCompatActivity {
 
     private RecyclerView userRecyclerView;
-    private UserAdapter userAdapter;
+    private ChatUserAdapter userAdapter; // Cambiando a ChatUserAdapter
     private List<User> userList;
 
     @Override
@@ -35,7 +35,9 @@ public class Chat extends AppCompatActivity {
         userRecyclerView = findViewById(R.id.userRecyclerView);
         userRecyclerView.setHasFixedSize(true);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        userAdapter = new UserAdapter(userList);
+
+        // Crear un adaptador usando ChatUserAdapter
+        userAdapter = new ChatUserAdapter(userList); // Cambio aquí
         userRecyclerView.setAdapter(userAdapter);
 
         // Obtener los datos de los usuarios desde Firebase Firestore
