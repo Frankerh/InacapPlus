@@ -6,12 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import com.bumptech.glide.Glide;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.ViewHolder> {
     private List<User> userList;
     private Context context;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(String uid);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
 
     public ChatUserAdapter(List<User> userList) {
         this.userList = userList;
@@ -31,19 +43,17 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.ViewHo
 
         holder.userNameTextView.setText(user.getName());
 
-        // Agregar un OnClickListener al elemento de la lista
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Obtén el UID del usuario al que se hizo clic en la lista
-                String otherUid = user.getUid();
-
-                // Crea un Intent para abrir la actividad de chat privado y pasa el UID del usuario
-                Intent chatIntent = new Intent(context, ChatPriv.class);
-                chatIntent.putExtra("otherUid", otherUid);
-
-                // Inicia la actividad de chat privado
-                context.startActivity(chatIntent);
+                if (mListener != null) {
+                    int adapterPosition = holder.getAdapterPosition();
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        User clickedUser = userList.get(adapterPosition);
+                        String uid = clickedUser.getUid();
+                        mListener.onItemClick(uid);
+                    }
+                }
             }
         });
     }

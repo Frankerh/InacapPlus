@@ -6,7 +6,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.squareup.picasso.Picasso;
+import de.hdodenhof.circleimageview.CircleImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class UserProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private ImageView profileImageView;
+    private CircleImageView profileImageView;
     private TextView usernameTextView;
     private Button followButton;
     private TextView descriptionTextView;
@@ -54,9 +55,11 @@ public class UserProfileActivity extends AppCompatActivity {
                                 if (document.exists()) {
                                     String username = document.getString("name");
                                     String description = document.getString("descripcion");
+                                    String profileImageUrl = document.getString("profileImageUrl");
 
                                     usernameTextView.setText(username);
                                     descriptionTextView.setText(description);
+                                    Picasso.get().load(profileImageUrl).into(profileImageView);
                                     // Load profile image from profileImageUrl (using Glide, Picasso, or Firebase Storage)
 
                                     followButton.setOnClickListener(view -> {

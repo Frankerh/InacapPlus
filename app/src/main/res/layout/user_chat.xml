@@ -22,7 +22,7 @@
             android:padding="16dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profileImageView"
+                android:id="@+id/userChatImageView"
                 android:layout_width="46dp"
                 android:layout_height="41dp"
                 android:layout_marginStart="10dp"
@@ -40,7 +40,7 @@
                 android:textStyle="bold"
                 android:backgroundTint="#000000"
                 android:textColor="@color/black"
-                android:layout_toEndOf="@id/profileImageView"
+                android:layout_toEndOf="@id/userChatImageView"
                 android:layout_marginStart="10dp"
                 android:layout_centerVertical="true" />
 

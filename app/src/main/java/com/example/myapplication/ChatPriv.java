@@ -1,113 +1,115 @@
 package com.example.myapplication;
-import com.example.myapplication.ChatMessage;
 
 import android.os.Bundle;
-import android.os.Message;
-import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.firebase.Timestamp;
-import com.google.android.material.appbar.MaterialToolbar;
+
+import com.example.myapplication.Messager;
+import com.example.myapplication.MessagerAdapter;
+import com.example.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChatPriv extends AppCompatActivity {
-    private FirebaseFirestore db;
-    private String myUid;
-    private String otherUid;
-    private String otherUserName;
-    List<ChatMessage> messageList = new ArrayList<>();
-    private EditText messageEditText;
-    private Button sendButton;
-    private RecyclerView chatRecyclerView;
-    private ChatAdapter chatAdapter;
+    private RecyclerView messageRecyclerView;
+    private List<Messager> messageList;
+    private MessagerAdapter messageAdapter;
 
+    private FirebaseFirestore db;
+    private FirebaseUser currentUser;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatpriv);
 
+        Toolbar toolbar = findViewById(R.id.chatToolbar);
         db = FirebaseFirestore.getInstance();
-        myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        otherUid = getIntent().getStringExtra("otherUid");
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = getIntent().getStringExtra("uid");
 
-        messageEditText = findViewById(R.id.messageEditText);
-        sendButton = findViewById(R.id.sendButton);
-        chatRecyclerView = findViewById(R.id.chatRecyclerView);
-
+        messageRecyclerView = findViewById(R.id.messageRecyclerView);
         messageList = new ArrayList<>();
-        chatAdapter = new ChatAdapter(messageList);
-
+        messageAdapter = new MessagerAdapter(messageList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        chatRecyclerView.setLayoutManager(layoutManager);
-        chatRecyclerView.setAdapter(chatAdapter);
+        messageRecyclerView.setLayoutManager(layoutManager);
+        messageRecyclerView.setAdapter(messageAdapter);
 
-        setToolbarTitle("Cargando..."); // Establece un título temporal mientras se carga el nombre del usuario
+        Button sendButton = findViewById(R.id.sendButton);
+        EditText messageEditText = findViewById(R.id.messageEditText);
 
-        sendButton.setOnClickListener(view -> sendMessage());
+        toolbar.setTitle("Nombre del usuario seleccionado");
 
-        // Obtener el nombre del usuario al que estás chateando
-        db.collection("Users")
-                .document(otherUid) // Utiliza el otherUid para obtener los datos del usuario
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            otherUserName = document.getString("name");
-                            setToolbarTitle(otherUserName); // Establece el nombre como título del Toolbar
-                        }
-                    }
-                });
+        sendButton.setOnClickListener(view -> {
+            String messageText = messageEditText.getText().toString().trim();
+            if (!messageText.isEmpty()) {
+                sendMessage(messageText);
+                messageEditText.setText("");
+            }
+        });
 
-        db.collection("ChatMessages")
-                .whereEqualTo("senderUid", myUid)
-                .whereEqualTo("receiverUid", otherUid)
-                .orderBy("timestamp", Query.Direction.ASCENDING)
-                .addSnapshotListener((queryDocumentSnapshots, e) -> {
-                    if (e != null) {
+        loadMessages();
+
+        db.collection("messages")
+                .whereEqualTo("senderId", currentUser.getUid())
+                .whereEqualTo("receiverId", uid)
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
                         // Manejar errores
                         return;
                     }
 
-                    messageList.clear(); // Limpia la lista antes de agregar nuevos mensajes
-
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        ChatMessage message = doc.toObject(ChatMessage.class);  // Asegúrate de usar ChatMessage
-                        messageList.add(message);
+                    for (DocumentChange dc : value.getDocumentChanges()) {
+                        if (dc.getType() == DocumentChange.Type.ADDED) {
+                            Messager message = dc.getDocument().toObject(Messager.class);
+                            messageList.add(message);
+                            messageAdapter.notifyDataSetChanged();
+                        }
                     }
-                    chatAdapter.notifyDataSetChanged();
                 });
     }
 
-    private void setToolbarTitle(String title) {
-        MaterialToolbar chatToolbar = findViewById(R.id.chatToolbar);
-        chatToolbar.setTitle(title);
+    private void loadMessages() {
+        db.collection("messages")
+                .whereEqualTo("senderId", currentUser.getUid())
+                .whereEqualTo("receiverId", uid)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Messager message = document.toObject(Messager.class);
+                            messageList.add(message);
+                        }
+                        messageAdapter.notifyDataSetChanged();
+                    } else {
+                        // Manejar errores al cargar mensajes
+                    }
+                });
     }
 
-    private void sendMessage() {
-        String messageText = messageEditText.getText().toString().trim();
-        if (!TextUtils.isEmpty(messageText)) {
-            ChatMessage message = new ChatMessage(myUid, otherUid, messageText, Timestamp.now());
-
-            db.collection("ChatMessages")
-                    .add(message)
-                    .addOnSuccessListener(documentReference -> {
-                        messageEditText.setText("");
-                    })
-                    .addOnFailureListener(e -> {
-                        // Manejar el error al enviar el mensaje
-                    });
-        }
+    private void sendMessage(String messageText) {
+        Messager message = new Messager(messageText, currentUser.getUid(), uid);
+        db.collection("messages")
+                .add(message)
+                .addOnSuccessListener(documentReference -> {
+                    messageList.add(message);
+                    messageAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    // Manejar errores al enviar mensaje
+                });
     }
 }

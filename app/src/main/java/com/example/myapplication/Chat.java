@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.QuerySnapshot ;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +51,7 @@ public class Chat extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String name = document.getString("name");
                             String profileImageUrl = document.getString("profileImageUrl");
-                            String uid = document.getString("uid"); // Agrega esta línea para obtener el UID
+                            String uid = document.getId();
 
                             // Crear un objeto User con los datos
                             User user = new User(name, profileImageUrl, uid);
@@ -66,50 +68,46 @@ public class Chat extends AppCompatActivity {
 
         // Configurar la navegación desde la actividad de chat
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.action_chat) {
-                    item.setChecked(true);
-                } else if (itemId == R.id.action_home) {
-                    Intent chatIntent = new Intent(Chat.this, Home.class);
-                    startActivity(chatIntent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                } else if (itemId == R.id.action_profile) {
-                    Intent homeIntent = new Intent(Chat.this, Perfil.class);
-                    startActivity(homeIntent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                }
-                else if (itemId == R.id.action_search) {
-                    Intent homeIntent = new Intent(Chat.this, UserSearchActivity.class);
-                    startActivity(homeIntent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                }
-                return true;
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.action_chat) {
+                item.setChecked(true);
+            } else if (itemId == R.id.action_home) {
+                Intent chatIntent = new Intent(Chat.this, Home.class);
+                startActivity(chatIntent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            } else if (itemId == R.id.action_profile) {
+                Intent homeIntent = new Intent(Chat.this, Perfil.class);
+                startActivity(homeIntent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
+            else if (itemId == R.id.action_search) {
+                Intent homeIntent = new Intent(Chat.this, UserSearchActivity.class);
+                startActivity(homeIntent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+            return true;
         });
         bottomNavigationView.setSelectedItemId(R.id.action_chat);
 
-        // Configura el oyente de clic para los elementos de la lista de usuarios
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String currentUid = currentUser != null ? currentUser.getUid() : "";
+
         userRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, userRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        // Obtén el UID del usuario al que se hizo clic en la lista
-                        String otherUid = userList.get(position).getUid();
-
-                        // Crea un Intent para abrir la actividad de chat privado y pasa el UID del usuario
+                        String uid= userList.get(position).getUid();
                         Intent chatIntent = new Intent(Chat.this, ChatPriv.class);
-                        chatIntent.putExtra("otherUid", otherUid);
-
-                        // Inicia la actividad de chat privado
+                        chatIntent.putExtra("otherUid", uid);
+                        chatIntent.putExtra("currentUid", currentUid);
                         startActivity(chatIntent);
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        // Acciones para clic largo (si las necesitas)
+                        // Long item click actions (if needed)
                     }
                 })
         );

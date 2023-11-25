@@ -9,19 +9,22 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private List<User> userList;
     private Context context;
-    private OnItemClickListener mListener; // Add the listener interface
+    private OnItemClickListener mListener;
 
-    // Interface for handling clicks
     public interface OnItemClickListener {
         void onItemClick(String uid);
     }
 
-    // Method to set the listener
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
     }
@@ -43,6 +46,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         User user = userList.get(position);
 
         holder.userNameTextView.setText(user.getName());
+        if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty()) {
+            Glide.with(context)
+                    .load(user.getProfileImageUrl())
+                    .placeholder(R.drawable.ic_profile)
+                    .into(holder.profileImageView);
+        }
 
         holder.verPerfilButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,11 +76,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView userNameTextView;
         Button verPerfilButton;
+        CircleImageView profileImageView; // Add this line
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userNameTextView = itemView.findViewById(R.id.userNameTextView);
             verPerfilButton = itemView.findViewById(R.id.verPerfilButton);
+            profileImageView = itemView.findViewById(R.id.profileImageView); // Initialize profileImageView
         }
     }
 }
